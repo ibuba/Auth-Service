@@ -8,15 +8,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class CustomUserDetails implements UserDetails {
 
     private String username;
     private String password;
-    private List<Role> roles;
+    private Set<Role> roles;
 
     public CustomUserDetails(User user) {
-        this.username = user.getUsername();
+        this.username = user.getEmail();
         this.password = user.getPassword();
     }
 

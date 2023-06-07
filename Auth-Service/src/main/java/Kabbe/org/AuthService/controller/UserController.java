@@ -16,39 +16,42 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
-@RequestMapping("/authentication")
+@RequestMapping("/api/v1/users")
+@CrossOrigin(origins = "http://localhost:8088")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private  final RestTemplate restTemplate;
+    private  final UserService userService;
 
-    @Autowired
-    private UserService userService;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private UserRepository userRepository;
-
+    // Signing up a new user
     @PostMapping("/signup")
-    public User addUser(@RequestBody User user){
-//        restTemplate.postForLocation("http://localhost:9092/users/signup", User.class);
-        return userService.addUser(user);
+    public ResponseEntity<?> addUser(@RequestBody User user){
+      User  u= userService.addUser(user);
+        return  u!=null ? new ResponseEntity(u, HttpStatus.CREATED) : new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
+
+
+    //Signing in a user
 
     @PostMapping("/login")
     public ResponseEntity<?> getToken(@RequestBody AuthRequest authRequest){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         if(authentication.isAuthenticated()){
         String token = userService.generateToken(authRequest.getUsername());
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("token", token);
         //visit home page which accepts headers
         return new ResponseEntity<>("Welcome!! ",headers, HttpStatus.OK);
+
         } else {
             throw new UsernameNotFoundException("username");
         }
     }
+
 
     public ResponseEntity<String> responseEntityBuilderAndHttpHeaders(String token) {
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -70,6 +73,9 @@ public class UserController {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
     }
+
+
+    //Validating a token
 
     @GetMapping("/validate")
     public String validateToken(@RequestParam String token){

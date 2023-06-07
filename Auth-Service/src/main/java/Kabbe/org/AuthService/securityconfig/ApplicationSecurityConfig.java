@@ -1,6 +1,8 @@
 package Kabbe.org.AuthService.securityconfig;
 
 import Kabbe.org.AuthService.service.CustomUserDetailsService;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,21 +19,14 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class ApplicationSecurityConfig {
 
-    @Bean
-    public RestTemplate restTemplate(){
-        return new RestTemplate();
-    }
-
+   private  final  PasswordEncoder passwordEncoder;
+   private final CustomUserDetailsService customUserDetailsService;
     @Bean
     public UserDetailsService userDetailsService(){
-        return new CustomUserDetailsService();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+return customUserDetailsService;
     }
 
     @Bean
@@ -52,7 +47,9 @@ public class ApplicationSecurityConfig {
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService());
+
         authenticationProvider.setPasswordEncoder(passwordEncoder());
+
         return authenticationProvider;
     }
 }

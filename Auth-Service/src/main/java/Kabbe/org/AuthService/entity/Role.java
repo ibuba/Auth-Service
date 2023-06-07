@@ -1,9 +1,6 @@
 package Kabbe.org.AuthService.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,10 +8,16 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data@AllArgsConstructor
 @NoArgsConstructor
+@Table(name="role_table")
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roleId;
-    private String roleName;
+    @Enumerated(EnumType.STRING)
+    private  RoleType roleName;
+
+    public Role(RoleType admin) {
+        this.roleName = admin;
+    }
 }

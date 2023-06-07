@@ -3,22 +3,17 @@ package Kabbe.org.AuthService.service.impl;
 import Kabbe.org.AuthService.entity.User;
 import Kabbe.org.AuthService.repository.UserRepository;
 import Kabbe.org.AuthService.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtService jwtService;
-
+    private final  UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private  final JwtService jwtService;
 
     @Override
     public User addUser(User user) {
