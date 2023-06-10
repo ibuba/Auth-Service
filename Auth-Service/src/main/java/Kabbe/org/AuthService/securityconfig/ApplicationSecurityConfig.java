@@ -10,10 +10,12 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
@@ -23,6 +25,8 @@ public class ApplicationSecurityConfig {
 
    private  final  PasswordEncoder passwordEncoder;
     private final CustomUserDetailsService customUserDetailsService;
+
+    private final LogoutHandler logoutHandler;
     @Bean
     public UserDetailsService userDetailsService(){
 return customUserDetailsService;
@@ -40,7 +44,11 @@ return customUserDetailsService;
                 .authorizeHttpRequests()
                 .requestMatchers("/authentication/**").permitAll()
                 .and()
-                .build();
+                .logout()
+                .logoutUrl("/api/v1/auth/logout")
+                .addLogoutHandler(logoutHandler)
+                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+                .and().build();
     }
 
     @Bean
