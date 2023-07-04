@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
+
 import java.util.Set;
 
 @Entity
@@ -15,14 +17,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-
-    private String firstName;
-    private String lastName;
-    private String username;
+    @NaturalId(mutable = true)
     private String email;
     private String password;
+    private boolean isEnabled = false;
 
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToMany
     @JoinColumn(name = "userId")
     private Set<Role> roles;
 

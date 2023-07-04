@@ -1,8 +1,7 @@
-package Kabbe.org.AuthService.service;
+package Kabbe.org.AuthService.securityconfig;
 
 import Kabbe.org.AuthService.entity.User;
 import Kabbe.org.AuthService.repository.UserRepository;
-import Kabbe.org.AuthService.service.impl.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
