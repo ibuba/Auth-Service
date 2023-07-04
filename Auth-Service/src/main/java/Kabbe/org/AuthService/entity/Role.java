@@ -17,7 +17,7 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private  RoleType roleName;
 
-    public Role(RoleType admin) {
-        this.roleName = admin;
+    public Role(RoleType ADMIN) {
+        this.roleName = ADMIN;
     }
 }
